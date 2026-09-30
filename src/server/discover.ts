@@ -1,8 +1,6 @@
 /**
  * Discover — the public directory routes.
- *
- *   GET /discover           → server-rendered directory page (zero JS)
- *   GET /api/discover       → the same entries as JSON
+ * *   GET /api/discover       → the same entries as JSON
  *
  * Only published manifests with discoverable === true are listed —
  * opt-in at the editor, never implied by publishing. Responses carry
@@ -14,12 +12,9 @@ import { Router } from "express";
 
 import {
   filterEntries,
-  isDiscoverable,
-  renderDirectoryHtml,
-  toDirectoryEntry,
+  isDiscoverable,  toDirectoryEntry,
 } from "../lib/directory";
 import { COLLECTIONS, type IdentityManifest } from "../lib/identity";
-import { config } from "./config";
 import { db } from "./db";
 import { wrap } from "./util";
 

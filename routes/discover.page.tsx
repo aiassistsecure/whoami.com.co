@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Search, SlidersHorizontal } from "lucide-react";
-import { WhoAmINav } from "../src/components/whoami/WhoAmINav";
+import { Bell, ChevronDown, Search, SlidersHorizontal } from "lucide-react";
 import { CreatorCard } from "../src/components/whoami/CreatorCard";
 import { getJson } from "../src/lib/api";
 import type { DiscoverView, SocialPlatform } from "../src/lib/whoami/contracts";
@@ -19,58 +18,55 @@ export default function WhoAmIDiscoverPage(): React.ReactElement {
   }, [query, platform]);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      void getJson<DiscoverView>(path).then(setView);
-    }, 120);
+    const timer = window.setTimeout(() => void getJson<DiscoverView>(path).then(setView), 100);
     return () => window.clearTimeout(timer);
   }, [path]);
 
   return (
-    <div className="whoami-page whoami-dark">
-      <WhoAmINav />
-      <main className="whoami-discover-shell">
-        <header className="whoami-discover-head">
-          <div>
-            <div className="whoami-kicker">DISCOVER</div>
-            <h1>Find someone worth knowing.</h1>
-          </div>
-          <div className="whoami-search">
-            <Search size={18} />
-            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search creators, niches, locations..." />
-          </div>
-        </header>
-
-        <div className="whoami-discover-grid">
-          <aside className="whoami-filters">
-            <div className="whoami-filter-title"><SlidersHorizontal size={16} /> Filters</div>
-            <label>Platform</label>
-            <select value={platform} onChange={(e) => setPlatform(e.target.value as SocialPlatform | "")}>
-              <option value="">All platforms</option>
-              <option value="instagram">Instagram</option>
-              <option value="x">X</option>
-              <option value="linkedin">LinkedIn</option>
-            </select>
-            <label>Category</label>
-            <select><option>All categories</option><option>Beauty</option><option>Technology</option><option>Lifestyle</option></select>
-            <label>Location</label>
-            <input placeholder="Any location" />
-            <label>Budget</label>
-            <div className="whoami-budget">$25 <span /> $250+</div>
-            <label className="whoami-check"><input type="checkbox" defaultChecked /> Available now</label>
-            <label className="whoami-check"><input type="checkbox" /> Verified only</label>
-          </aside>
-
-          <section className="whoami-results">
-            <div className="whoami-results-head">
-              <strong>{view?.creators.length ?? 0} creators</strong>
-              <span>Sorted by relevance</span>
-            </div>
-            <div className="whoami-results-list">
-              {(view?.creators ?? []).map((creator) => <CreatorCard creator={creator} key={creator.handle} />)}
-            </div>
-          </section>
+    <div className="wa-page wa-dark wa-discover-page">
+      <header className="wa-discover-top">
+        <a href="/" className="wa-discover-wordmark">whoami<small>by The Agency</small></a>
+        <div className="wa-discover-icons">
+          <Search size={25} />
+          <Bell size={23} />
+          <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=80&q=80" alt="" />
         </div>
+      </header>
+
+      <main className="wa-discover-shell">
+        <h1>Find Creators</h1>
+        <p className="wa-discover-sub">Search by platform, content type, location, or category.</p>
+
+        <div className="wa-searchbox">
+          <Search size={23} />
+          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search creators, niches, or locations..." />
+          <SlidersHorizontal size={22} />
+        </div>
+
+        <div className="wa-filter-pills">
+          <button onClick={() => setPlatform(platform ? "" : "instagram")}>Platform <ChevronDown size={16} /></button>
+          <button>Content Type <ChevronDown size={16} /></button>
+          <button>Location <ChevronDown size={16} /></button>
+          <button>Category <ChevronDown size={16} /></button>
+        </div>
+
+        <div className="wa-range-row">
+          <span>$0</span>
+          <div className="wa-range"><i /><b className="wa-range-dot first" /><b className="wa-range-dot last" /></div>
+          <span>$500+</span>
+          <label><input type="checkbox" /> Verified only</label>
+        </div>
+
+        <div className="wa-results-toolbar">
+          <span>342 creators</span>
+          <button>Most relevant <ChevronDown size={16} /></button>
+        </div>
+
+        <section className="wa-results-list">
+          {(view?.creators ?? []).map((creator) => <CreatorCard creator={creator} key={creator.handle} />)}
+        </section>
       </main>
+      <footer className="wa-footer">WhoAmI by The Agency</footer>
     </div>
   );
 }

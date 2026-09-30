@@ -5,7 +5,7 @@ export function WhoAmINav(): React.ReactElement {
   return (
     <nav className="whoami-nav">
       <div className="whoami-nav-inner">
-        <Link href="/" className="whoami-wordmark">whoami</Link>
+        <Link href="/" className="whoami-wordmark"><span>whoami</span><small>by The Agency</small></Link>
         <div className="whoami-nav-links">
           <Link href="/discover">Discover</Link>
           <a href="#how-it-works">How It Works</a>

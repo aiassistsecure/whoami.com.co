@@ -1,4 +1,4 @@
-export type SocialPlatform = "instagram" | "x" | "linkedin";
+export type SocialPlatform = "instagram" | "tiktok" | "x" | "youtube" | "linkedin";
 export type Placement = "post" | "story" | "reel";
 export type MediaType = "video" | "photo";
 
@@ -12,6 +12,7 @@ export interface CreatorCard {
   displayName: string;
   verified: boolean;
   avatarUrl: string;
+  coverUrl?: string;
   location: string;
   category: string;
   followersLabel: string;
@@ -19,6 +20,8 @@ export interface CreatorCard {
   platform: SocialPlatform;
   rates: Record<Placement, RatePair>;
   paymentMethods: Array<"x_money" | "cash_app">;
+  socialHandles?: Partial<Record<SocialPlatform, string>>;
+  shortBio?: string;
 }
 
 export interface HomeView {

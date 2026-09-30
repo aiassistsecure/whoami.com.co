@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { BadgeCheck, MapPin, X } from "lucide-react";
-import { WhoAmINav } from "../../src/components/whoami/WhoAmINav";
+import { ArrowLeft, BadgeCheck, Ellipsis, MapPin, Share2 } from "lucide-react";
 import { RateTable } from "../../src/components/whoami/RateTable";
+import { SocialIcon } from "../../src/components/whoami/SocialIcon";
 import { getJson, postJson } from "../../src/lib/api";
 import type { CreatorProfileView, MediaType, Placement } from "../../src/lib/whoami/contracts";
 
@@ -13,32 +13,22 @@ function routeHandle(): string {
 export default function WhoAmICreatorPage(): React.ReactElement {
   const handle = useMemo(routeHandle, []);
   const [profile, setProfile] = useState<CreatorProfileView | null>(null);
-  const [offerOpen, setOfferOpen] = useState(() => new URLSearchParams(window.location.search).get("offer") === "1");
   const [placement, setPlacement] = useState<Placement>("post");
-  const [mediaType, setMediaType] = useState<MediaType>("video");
-  const [amount, setAmount] = useState(0);
+  const [mediaType, setMediaType] = useState<MediaType>("photo");
+  const [amount, setAmount] = useState<number | "">("");
   const [sent, setSent] = useState(false);
 
   useEffect(() => {
-    void getJson<CreatorProfileView>(`/api/whoami/creators/${encodeURIComponent(handle)}`).then((next) => {
-      setProfile(next);
-      setAmount(next.rates.post.video);
-    });
+    void getJson<CreatorProfileView>(`/api/whoami/creators/${encodeURIComponent(handle)}`).then(setProfile);
   }, [handle]);
 
-  useEffect(() => {
-    if (!profile) return;
-    setAmount(profile.rates[placement][mediaType]);
-  }, [profile, placement, mediaType]);
-
-  if (!profile) {
-    return <div className="whoami-page whoami-profile-page"><WhoAmINav /><div className="whoami-loading">Loading creator…</div></div>;
-  }
+  if (!profile) return <div className="wa-profile-loading">Loading creator…</div>;
 
   const listed = profile.rates[placement][mediaType];
+  const cover = profile.coverUrl ?? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=90";
 
   async function sendOffer(): Promise<void> {
-    if (!profile) return;
+    if (!profile || amount === "") return;
     await postJson("/api/whoami/offers", {
       creatorHandle: profile.handle,
       platform: profile.platform,
@@ -52,75 +42,85 @@ export default function WhoAmICreatorPage(): React.ReactElement {
   }
 
   return (
-    <div className="whoami-page whoami-profile-page">
-      <WhoAmINav />
-      <main className="whoami-profile-shell">
-        <section className="whoami-profile-card">
-          <div className="whoami-profile-hero">
-            <img src={profile.avatarUrl} alt="" className="whoami-profile-avatar" />
-            <div className="whoami-profile-title">
-              <h1>{profile.displayName} {profile.verified && <BadgeCheck size={22} className="whoami-verified" />}</h1>
-              <div className="whoami-profile-handle">@{profile.handle}</div>
-              <div className="whoami-profile-tags">{profile.category} · {profile.platform.toUpperCase()}</div>
-              <div className="whoami-profile-location"><MapPin size={14} /> {profile.location}</div>
+    <div className="wa-profile-page">
+      <main className="wa-profile-shell">
+        <section className="wa-profile-card">
+          <div className="wa-cover">
+            <img src={cover} alt="" />
+            <button className="wa-round wa-back" onClick={() => history.back()} aria-label="Back"><ArrowLeft /></button>
+            <div className="wa-cover-actions">
+              <button className="wa-cover-pill"><Share2 size={20} /> Share</button>
+              <button className="wa-round" aria-label="More options"><Ellipsis /></button>
             </div>
-            <div className="whoami-availability">● AVAILABLE</div>
           </div>
 
-          <p className="whoami-profile-bio">{profile.bio}</p>
+          <section className="wa-profile-main">
+            <img src={profile.avatarUrl} alt="" className="wa-profile-avatar" />
 
-          <section className="whoami-profile-rates">
-            <div className="whoami-profile-section-title">MY PRICE</div>
-            <RateTable rates={profile.rates} />
+            <div className="wa-profile-actions">
+              <button className="wa-btn wa-btn-outline">Follow</button>
+              <a href="#offer" className="wa-btn wa-btn-black">Make an Offer</a>
+            </div>
+
+            <div className="wa-profile-name">
+              <h1>@{profile.handle} {profile.verified && <BadgeCheck className="wa-blue-check" size={25} />}</h1>
+              <p>{profile.category} · {profile.location}</p>
+            </div>
+
+            <p className="wa-profile-bio">{profile.bio}</p>
+            <div className="wa-profile-location"><MapPin size={20} /> {profile.location}</div>
+
+            <div className="wa-social-stats">
+              <span><SocialIcon name="instagram" size={30} /><b>{profile.socialHandles?.instagram ?? profile.followersLabel}</b></span>
+              <span><SocialIcon name="tiktok" size={30} /><b>{profile.socialHandles?.tiktok ?? "8.1K"}</b></span>
+              <span><SocialIcon name="x" size={28} /><b>{profile.socialHandles?.x ?? "4.2K"}</b></span>
+            </div>
+
+            <nav className="wa-profile-tabs">
+              <button className="active">Rates</button>
+              <button>About</button>
+              <button>Audience</button>
+              <button>Portfolio</button>
+            </nav>
+
+            <div className="wa-profile-rates"><RateTable rates={profile.rates} /></div>
+
+            <section className="wa-offer-card" id="offer">
+              <h2>Make an Offer</h2>
+              <div className="wa-offer-creator">
+                <img src={profile.avatarUrl} alt="" />
+                <div><strong>@{profile.handle}</strong><span>Instagram Post</span></div>
+              </div>
+
+              <div className="wa-offer-grid">
+                <label><span>Content Type</span>
+                  <select value={placement} onChange={(e) => setPlacement(e.target.value as Placement)}>
+                    <option value="post">Instagram Post</option>
+                    <option value="story">Instagram Story</option>
+                    <option value="reel">Instagram Reel</option>
+                  </select>
+                </label>
+                <label><span>Media Type</span>
+                  <select value={mediaType} onChange={(e) => setMediaType(e.target.value as MediaType)}>
+                    <option value="photo">Photo</option>
+                    <option value="video">Video</option>
+                  </select>
+                </label>
+                <label><span>Listed Price</span><div className="wa-readonly">${listed}</div></label>
+                <label><span>Your Offer</span>
+                  <div className="wa-money"><span>$</span><input type="number" min={1} value={amount} onChange={(e) => setAmount(e.target.value === "" ? "" : Number(e.target.value))} /></div>
+                </label>
+              </div>
+
+              <button className="wa-btn wa-btn-black wa-send-offer" onClick={() => void sendOffer()}>
+                {sent ? "Offer Sent ✓" : "Send Offer"}
+              </button>
+            </section>
+
+            <div className="wa-agency-mark">WhoAmI by The Agency</div>
           </section>
-
-          <button className="whoami-button whoami-button-primary whoami-offer-main" onClick={() => setOfferOpen(true)}>
-            Make an Offer
-          </button>
-
-          <div className="whoami-profile-stats">
-            <div><strong>{profile.followersLabel}</strong><span>followers</span></div>
-            <div><strong>{profile.engagementLabel}</strong><span>engagement</span></div>
-            <div><strong>{profile.completedDeals}</strong><span>completed deals</span></div>
-            <div><strong>{profile.repeatPartners}</strong><span>repeat partners</span></div>
-          </div>
-
-          <div className="whoami-payments">
-            <span>GET PAID</span>
-            <strong>X Money</strong>
-            <strong>Cash App</strong>
-          </div>
         </section>
       </main>
-
-      {offerOpen && (
-        <div className="whoami-modal-backdrop" onMouseDown={() => setOfferOpen(false)}>
-          <div className="whoami-offer-modal" onMouseDown={(e) => e.stopPropagation()}>
-            <button className="whoami-modal-close" onClick={() => setOfferOpen(false)}><X size={18} /></button>
-            {sent ? (
-              <div className="whoami-offer-sent"><div className="whoami-kicker">OFFER SENT</div><h2>It's in @{profile.handle}'s inbox.</h2></div>
-            ) : (
-              <>
-                <div className="whoami-kicker">MAKE AN OFFER</div>
-                <h2>@{profile.handle}</h2>
-                <label>Placement</label>
-                <select value={placement} onChange={(e) => setPlacement(e.target.value as Placement)}>
-                  <option value="post">Post</option><option value="story">Story</option><option value="reel">Reel</option>
-                </select>
-                <label>Type</label>
-                <div className="whoami-segment">
-                  <button className={mediaType === "video" ? "active" : ""} onClick={() => setMediaType("video")}>Video</button>
-                  <button className={mediaType === "photo" ? "active" : ""} onClick={() => setMediaType("photo")}>Photo</button>
-                </div>
-                <label>Your offer</label>
-                <div className="whoami-money-input"><span>$</span><input type="number" min={1} value={amount} onChange={(e) => setAmount(Number(e.target.value))} /></div>
-                <div className="whoami-listed">Listed price: ${listed}</div>
-                <button className="whoami-button whoami-button-primary whoami-button-lg" onClick={() => void sendOffer()}>Send Offer</button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

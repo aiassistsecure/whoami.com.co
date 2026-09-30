@@ -48,10 +48,3 @@ discover.get("/api/discover", wrap(async (req, res) => {
   res.json({ entries: await listEntries(q, type) });
 }));
 
-discover.get("/discover", wrap(async (req, res) => {
-  const { q, type } = params(req);
-  const entries = await listEntries(q, type);
-  const origin = config.publicOrigin || `${req.protocol}://${req.get("host") ?? "localhost"}`;
-  res.setHeader("content-type", "text/html; charset=utf-8");
-  res.send(renderDirectoryHtml(entries, { origin, brand: config.brandName, q, type }));
-}));

@@ -7,7 +7,7 @@ import { getJson } from "../src/lib/api";
 import type { HomeView } from "../src/lib/whoami/contracts";
 
 export const intent = {
-  purpose: "WhoAmI creator marketplace landing page",
+  purpose: "WhoAmI by The Agency creator marketplace landing page",
   primaryAction: "List yourself",
   seoKeyword: "creator marketplace",
 };
@@ -25,12 +25,12 @@ export default function WhoAmIHomePage(): React.ReactElement {
       <main>
         <section className="whoami-hero">
           <div className="whoami-hero-copy">
-            <div className="whoami-kicker">EVERYONE IS AN INFLUENCER</div>
+            <div className="whoami-kicker">WHOAMI BY THE AGENCY</div>
             <h1>Everyone's social media has value.</h1>
             <p className="whoami-hero-price">What's your price?</p>
             <p className="whoami-hero-sub">
               Set your rates. Get discovered. Make direct deals with brands.
-              No premium gates. No agency required.
+              No premium gates. No gatekeepers.
             </p>
             <div className="whoami-hero-actions">
               <Link href="/identities" className="whoami-button whoami-button-primary whoami-button-lg">

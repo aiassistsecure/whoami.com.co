@@ -13,9 +13,11 @@ import { Router } from "express";
 import {
   filterEntries,
   isDiscoverable,
+  renderDirectoryHtml,
   toDirectoryEntry,
 } from "../lib/directory";
 import { COLLECTIONS, type IdentityManifest } from "../lib/identity";
+import { config } from "./config";
 import { db } from "./db";
 import { wrap } from "./util";
 
@@ -57,3 +59,22 @@ discover.get(
     res.json({ entries: await listEntries(q, type) });
   }),
 );
+
+
+export const discoverPage = wrap(async (req, res) => {
+  const { q, type } = params(req);
+  const entries = await listEntries(q, type);
+  const origin =
+    config.publicOrigin ||
+    `${req.protocol}://${req.get("host") ?? "localhost"}`;
+
+  res.setHeader("content-type", "text/html; charset=utf-8");
+  res.send(
+    renderDirectoryHtml(entries, {
+      origin,
+      brand: config.brandName,
+      q,
+      type,
+    }),
+  );
+});

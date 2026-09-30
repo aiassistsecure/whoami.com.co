@@ -25,7 +25,7 @@ export default function WhoAmIHomePage(): React.ReactElement {
       <WhoAmINav />
       <main>
         <section className="wa-landing-hero">
-          <img src={HERO} alt="" className="wa-hero-photo" />
+          <img src={HERO} alt="" className="wa-hero-photo" fetchPriority="high" />
           <div className="wa-hero-shade" />
           <div className="wa-hero-copy">
             <h1>Everyone&apos;s<br />social media<br />has value.</h1>
@@ -52,7 +52,7 @@ export default function WhoAmIHomePage(): React.ReactElement {
             {(view?.featuredCreators ?? []).slice(0, 3).map((creator) => (
               <article className="wa-feature-card" key={creator.handle}>
                 <div className="wa-feature-image-wrap">
-                  <img src={creator.avatarUrl} alt="" className="wa-feature-image" />
+                  <img src={creator.avatarUrl} alt={`${creator.displayName} creator portrait`} className="wa-feature-image" loading="lazy" />
                   {creator.verified && <span className="wa-verified-chip"><BadgeCheck size={15} /> Verified</span>}
                 </div>
                 <strong>@{creator.handle}</strong>

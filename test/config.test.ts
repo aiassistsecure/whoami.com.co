@@ -29,7 +29,7 @@ test("brand + default theme: defaults, overrides, junk falls back", () => {
     { LINKS_BRAND_NAME: undefined, LINKS_DEFAULT_THEME: undefined },
     loadConfig,
   );
-  assert.equal(defaults.brandName, "NEDB Links");
+  assert.equal(defaults.brandName, "WhoAmI by The Agency");
   assert.equal(defaults.defaultTheme, "pro");
 
   const branded = withEnv(

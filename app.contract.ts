@@ -1,7 +1,7 @@
 import { defineApp } from "@interchained/portal-contract";
 
 /**
- * NEDB Links — Portal contract (schema v1)
+ * WhoAmI by The Agency — Portal contract (schema v1)
  *
  * North Star:
  *   NEDB stores knowledge. Portal renders experiences. Links publishes identity.
@@ -18,10 +18,10 @@ import { defineApp } from "@interchained/portal-contract";
  *   available to the community.
  */
 export default defineApp({
-  name: "NEDB Links",
+  name: "WhoAmI by The Agency",
   version: "0.1.0",
   description:
-    "Identity publishing on NEDB. Claim a handle, build a structured identity, publish it everywhere: profile page, business card, QR, vCard, JSON — every surface is a renderer over one canonical Identity Manifest.",
+    "WhoAmI by The Agency is an open creator marketplace for pricing social reach, discovering creators, making offers, and building trusted deal history on NEDB.",
   primaryAudience: [
     "Creators and freelancers",
     "Small businesses (salons, restaurants, studios)",
@@ -72,9 +72,9 @@ export default defineApp({
   seo: {
     enabled: true,
     primaryKeyword: "link in bio identity platform",
-    titleTemplate: "%s | NEDB Links",
+    titleTemplate: "%s | WhoAmI by The Agency",
     defaultDescription:
-      "One handle, one identity, every surface. Claim your handle, publish a profile, business card, and QR code — self-hostable, versioned, and tamper-evident on the NEDB engine.",
+      "Everyone's social media has value. WhoAmI by The Agency lets creators set their price and lets brands discover and make direct offers.",
     sitemap: true,
     robots: true,
   },

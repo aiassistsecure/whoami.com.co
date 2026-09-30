@@ -207,6 +207,10 @@ export function createApp(): Express {
   if (hasDist) {
     app.get(["/", "/index.html"], (_req, res) => sendShell(res));
     app.use(express.static(dist, { index: false }));
+  } else {
+    // Preserve the inherited zero-JS Discover contract for live API tests
+    // and source-only development. Production builds hand /discover to Portal.
+    app.get("/discover", discoverPage);
   }
 
   // ── Public identity surfaces (/:handle, /go/*) ────────────────────────────

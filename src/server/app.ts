@@ -27,7 +27,7 @@ import { payments } from "./payments";
 import { preview } from "./preview";
 import { purchases, purchasesApi } from "./purchases";
 import { demo } from "./demo";
-import { discover } from "./discover";
+import { discover, discoverPage } from "./discover";
 import { qrFlyer, qrStudio } from "./qrstudio";
 import { raffles } from "./raffles";
 import { render } from "./render";

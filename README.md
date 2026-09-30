@@ -1,8 +1,8 @@
-# WhoAmI
+# WhoAmI by The Agency
 
 **Everyone's social media has value. What's your price?**
 
-WhoAmI is an open marketplace for creators, communities, brands, and everyday people to turn social reach into transparent, direct opportunities.
+WhoAmI by The Agency is an open marketplace for creators, communities, brands, and everyday people to turn social reach into transparent, direct opportunities.
 
 The premise is simple: **everyone is an influencer**. You should not need an arbitrary follower threshold, an agency, or a paid software tier before your audience is allowed to have economic value.
 
@@ -36,14 +36,14 @@ Examples:
 - **Creators set their price.** The marketplace provides discovery and price signals; it does not decide who is valuable.
 - **Trust can be verified.** Verification is a paid service because real review takes real human time.
 - **Verification is not access.** Unverified users can still participate, earn, negotiate, and build reputation.
-- **Open source by default.** WhoAmI is released under the GNU GPLv3.
+- **Open source by default.** WhoAmI by The Agency is released under the GNU GPLv3.
 - **Small audiences count.** Relevance, trust, geography, niche, and engagement can matter as much as raw follower count.
 
 ## Marketplace thesis
 
 A person with 500 relevant local followers may be more useful to a neighborhood business than a celebrity account with millions of unrelated followers.
 
-WhoAmI exists to make that value discoverable and tradable.
+WhoAmI by The Agency exists to make that value discoverable and tradable.
 
 ## Domain
 

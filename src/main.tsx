@@ -11,7 +11,7 @@ function NotFound(): React.ReactElement {
       <p className="font-mono text-sm text-accent-soft">404</p>
       <h1 className="text-3xl font-bold">This handle isn&apos;t claimed yet</h1>
       <a href="/" className="text-accent-soft underline underline-offset-4">
-        Claim it on NEDB Links
+        Claim it on WhoAmI by The Agency
       </a>
     </div>
   );

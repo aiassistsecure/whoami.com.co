@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Identity publishing on NEDB — the developer-friendly Linktree. Claim a handle, publish everywhere. A Portal-powered application over the NEDB engine.",
+  "description": "WhoAmI by The Agency — an open creator marketplace for pricing social reach, discovery, direct offers, and trusted deal history on NEDB.",
   "license": "GPL-3.0-or-later",
   "scripts": {
     "dev": "concurrently -k -n web,api -c cyan,magenta \"npm run dev:web\" \"npm run dev:api\"",

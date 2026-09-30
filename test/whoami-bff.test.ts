@@ -16,7 +16,7 @@ before(() => {
 
 after(() => server?.close());
 
-test("WhoAmI BFF serves the approved home model", async () => {
+test("WhoAmI by The Agency BFF serves the approved home model", async () => {
   const r = await fetch(`${base}/api/whoami/home`);
   assert.equal(r.status, 200);
   const j = await r.json() as { hero: { title: string; subtitle: string }; featuredCreators: unknown[] };
@@ -25,7 +25,7 @@ test("WhoAmI BFF serves the approved home model", async () => {
   assert.ok(j.featuredCreators.length >= 3);
 });
 
-test("WhoAmI creator profile exposes video/photo rate pairs", async () => {
+test("WhoAmI by The Agency creator profile exposes video/photo rate pairs", async () => {
   const r = await fetch(`${base}/api/whoami/creators/interchained`);
   assert.equal(r.status, 200);
   const j = await r.json() as { rates: { post: { video: number; photo: number } } };
@@ -33,7 +33,7 @@ test("WhoAmI creator profile exposes video/photo rate pairs", async () => {
   assert.equal(j.rates.post.photo, 125);
 });
 
-test("WhoAmI discover filters by platform", async () => {
+test("WhoAmI by The Agency discover filters by platform", async () => {
   const r = await fetch(`${base}/api/whoami/discover?platform=x`);
   const j = await r.json() as { creators: Array<{ platform: string }> };
   assert.ok(j.creators.length > 0);

@@ -35,7 +35,7 @@ export interface LinksConfig {
   smtpSecure: boolean;
   smtpUser?: string;
   smtpPass?: string;
-  /** RFC 5322 From — e.g. "NEDB Links <no-reply@ne-db.com>". */
+  /** RFC 5322 From — e.g. "WhoAmI by The Agency <no-reply@whoami.com.co>". */
   mailFrom?: string;
   /** Operations inbox notified when a HireMe interview is confirmed. */
   adminEmail?: string;
@@ -99,7 +99,7 @@ export function loadConfig(): LinksConfig {
     // tools (vite, PaaS runtimes) and port collisions/skew follow.
     port: Number(process.env.LINKS_API_PORT || process.env.PORT || 3001),
     authMode,
-    brandName: (process.env.LINKS_BRAND_NAME || "NEDB Links").slice(0, 40),
+    brandName: (process.env.LINKS_BRAND_NAME || "WhoAmI by The Agency").slice(0, 40),
     brandKey: ["default", "kundli"].includes(process.env.LINKS_BRAND_KEY || "")
       ? (process.env.LINKS_BRAND_KEY as string)
       : "default",

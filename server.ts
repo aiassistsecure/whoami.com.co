@@ -1,5 +1,5 @@
 /**
- * NEDB Links — Express server bootstrap.
+ * WhoAmI by The Agency — Express server bootstrap.
  *
  * NEDB stores knowledge. Portal renders experiences. Links publishes identity.
  *
@@ -47,7 +47,7 @@ const { warnIfOpen } = await import("./src/server/auth");
 await ensureDatabase();
 
 const server = createApp().listen(config.port, () => {
-  console.log(`\x1b[36m⬡ NEDB Links\x1b[0m listening on :${config.port}`);
+  console.log(`\x1b[36m⬡ WhoAmI by The Agency\x1b[0m listening on :${config.port}`);
   console.log(`  NEDB → embedded durable DAG (db: ${config.nedbDb})`);
   warnIfOpen();
 });

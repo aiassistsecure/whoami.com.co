@@ -4,7 +4,7 @@
 
 **Everyone's social media has value. What's your price?**
 
-WhoAmI is a marketplace where people can openly price access to their social distribution and where brands, businesses, organizations, and other creators can discover them and make offers.
+WhoAmI by The Agency is a marketplace where people can openly price access to their social distribution and where brands, businesses, organizations, and other creators can discover them and make offers.
 
 The platform starts from one belief:
 
@@ -12,11 +12,11 @@ The platform starts from one belief:
 
 Influence is not a badge granted after reaching a follower threshold. A small trusted audience can be economically useful, especially when it is local, specialized, engaged, or difficult to reach through conventional advertising.
 
-## What WhoAmI should make easy
+## What WhoAmI by The Agency should make easy
 
 Today a collaboration can require discovery, cold outreach, email threads, negotiation, contracts, asset exchange, verification, payment, and proof of completion.
 
-WhoAmI should compress that workflow into:
+WhoAmI by The Agency should compress that workflow into:
 
 **Discover → Offer → Accept / Counter → Create → Verify → Pay**
 
@@ -60,7 +60,7 @@ Creators can accept, counter, or decline.
 
 ## Pricing primitives
 
-WhoAmI should support both transactional and recurring relationships.
+WhoAmI by The Agency should support both transactional and recurring relationships.
 
 ### One-off
 
@@ -86,7 +86,7 @@ This allows a business to build a portfolio of smaller creators instead of relyi
 
 ## Everyone is premium
 
-WhoAmI should not have conventional premium feature gates.
+WhoAmI by The Agency should not have conventional premium feature gates.
 
 Core product capabilities should remain available to everyone:
 - profile creation
@@ -122,7 +122,7 @@ A user must not need verification to participate in the marketplace.
 
 The software is licensed under GPLv3.
 
-The hosted WhoAmI marketplace may still create value through:
+The hosted WhoAmI by The Agency marketplace may still create value through:
 - marketplace transaction economics
 - human verification
 - payment infrastructure
@@ -137,7 +137,7 @@ Open software and a commercially sustainable hosted marketplace are compatible.
 
 ## Long-term opportunity
 
-As transactions accumulate, WhoAmI may become a source of real market price discovery for social distribution.
+As transactions accumulate, WhoAmI by The Agency may become a source of real market price discovery for social distribution.
 
 Instead of asking:
 

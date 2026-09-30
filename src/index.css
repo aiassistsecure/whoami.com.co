@@ -1696,3 +1696,373 @@ html.theme-fade *::after {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* ──────────────────────────────────────────────────────────────────────
+ * WhoAmI by The Agency — approved CREATOR PROFILE screen contract.
+ * ──────────────────────────────────────────────────────────────────── */
+.wa-profile-page {
+  min-height: 100vh;
+  background: #f5f5f7;
+  color: #111217;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+.wa-profile-shell {
+  width: min(980px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 34px 0 80px;
+}
+.wa-profile-card {
+  overflow: hidden;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 26px 70px rgba(15,18,25,.12);
+}
+.wa-cover {
+  position: relative;
+  height: 330px;
+  background: #ddd;
+}
+.wa-cover > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.wa-cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.16), transparent 28%, transparent 70%, rgba(0,0,0,.08));
+  pointer-events: none;
+}
+.wa-round,
+.wa-cover-pill {
+  position: relative;
+  z-index: 2;
+  border: 0;
+  background: rgba(255,255,255,.96);
+  color: #111217;
+  box-shadow: 0 5px 18px rgba(0,0,0,.13);
+}
+.wa-round {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+}
+.wa-back {
+  position: absolute;
+  top: 22px;
+  left: 22px;
+}
+.wa-cover-actions {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  z-index: 3;
+  display: flex;
+  gap: 10px;
+}
+.wa-cover-pill {
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+}
+.wa-profile-main {
+  position: relative;
+  padding: 0 48px 52px;
+}
+.wa-profile-avatar {
+  width: 140px;
+  height: 140px;
+  margin-top: -70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 6px solid #fff;
+  background: #ececf0;
+  box-shadow: 0 10px 30px rgba(17,18,23,.12);
+}
+.wa-profile-actions {
+  position: absolute;
+  top: 28px;
+  right: 48px;
+  display: flex;
+  gap: 10px;
+}
+.wa-profile-actions .wa-btn {
+  min-width: 128px;
+  min-height: 48px;
+}
+.wa-profile-name {
+  margin-top: 18px;
+}
+.wa-profile-name h1 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 34px;
+  line-height: 1.08;
+  letter-spacing: -.045em;
+}
+.wa-blue-check {
+  color: #2c62f0;
+  flex: none;
+}
+.wa-profile-name p {
+  margin: 7px 0 0;
+  color: #75767e;
+  font-size: 15px;
+}
+.wa-profile-bio {
+  max-width: 650px;
+  margin: 24px 0 0;
+  color: #383940;
+  font-size: 16px;
+  line-height: 1.65;
+}
+.wa-profile-location {
+  margin-top: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #6d6e76;
+  font-size: 14px;
+}
+.wa-social-stats {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-top: 25px;
+}
+.wa-social-stats > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.wa-social-stats b {
+  font-size: 14px;
+}
+.wa-profile-tabs {
+  display: flex;
+  gap: 34px;
+  margin-top: 40px;
+  border-bottom: 1px solid #e9e9ed;
+}
+.wa-profile-tabs button {
+  border: 0;
+  background: transparent;
+  color: #7d7e86;
+  padding: 0 0 14px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.wa-profile-tabs button.active {
+  color: #111217;
+  border-bottom: 3px solid #111217;
+}
+.wa-profile-rates {
+  margin-top: 25px;
+}
+.wa-profile-rate-table {
+  border: 1px solid #e5e5ea;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.wa-profile-rate-head,
+.wa-profile-rate-row {
+  display: grid;
+  grid-template-columns: 1.4fr .6fr .6fr;
+  gap: 16px;
+  align-items: center;
+}
+.wa-profile-rate-head {
+  min-height: 48px;
+  padding: 0 18px;
+  background: #f8f8fa;
+  color: #888991;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.wa-profile-rate-head span:not(:first-child),
+.wa-profile-rate-row strong {
+  text-align: right;
+}
+.wa-profile-rate-row {
+  min-height: 66px;
+  padding: 0 18px;
+  border-top: 1px solid #ececf0;
+}
+.wa-profile-rate-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: #2b2c32;
+  font-size: 15px;
+  font-weight: 700;
+}
+.wa-profile-rate-row strong {
+  font-size: 16px;
+}
+.wa-offer-card {
+  margin-top: 28px;
+  border: 1px solid #e3e3e8;
+  border-radius: 18px;
+  padding: 28px;
+  background: #fff;
+}
+.wa-offer-card h2 {
+  margin: 0;
+  font-size: 24px;
+  letter-spacing: -.03em;
+}
+.wa-offer-creator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+}
+.wa-offer-creator img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.wa-offer-creator div {
+  display: grid;
+  gap: 3px;
+}
+.wa-offer-creator span {
+  color: #777880;
+  font-size: 13px;
+}
+.wa-offer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 24px;
+}
+.wa-offer-grid label {
+  display: grid;
+  gap: 8px;
+}
+.wa-offer-grid label > span {
+  color: #6f7078;
+  font-size: 12px;
+  font-weight: 700;
+}
+.wa-offer-grid select,
+.wa-readonly,
+.wa-money {
+  min-height: 50px;
+  border: 1px solid #dfe0e5;
+  border-radius: 12px;
+  background: #fff;
+  color: #18191e;
+  padding: 0 14px;
+  font: inherit;
+}
+.wa-offer-grid select {
+  outline: none;
+}
+.wa-readonly,
+.wa-money {
+  display: flex;
+  align-items: center;
+}
+.wa-readonly {
+  font-weight: 700;
+}
+.wa-money {
+  gap: 6px;
+}
+.wa-money > span {
+  color: #6b6c73;
+}
+.wa-money input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  font: inherit;
+  color: #18191e;
+}
+.wa-send-offer {
+  width: 100%;
+  min-height: 54px;
+  margin-top: 22px;
+  font-size: 15px;
+}
+.wa-agency-mark {
+  margin-top: 34px;
+  text-align: center;
+  color: #a0a1a8;
+  font-size: 12px;
+  font-weight: 600;
+}
+.wa-profile-loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #f5f5f7;
+  color: #4b4c53;
+}
+@media (max-width: 760px) {
+  .wa-profile-shell {
+    width: min(100% - 24px, 620px);
+    padding-top: 12px;
+  }
+  .wa-cover {
+    height: 245px;
+  }
+  .wa-profile-main {
+    padding: 0 22px 36px;
+  }
+  .wa-profile-avatar {
+    width: 112px;
+    height: 112px;
+    margin-top: -56px;
+  }
+  .wa-profile-actions {
+    position: static;
+    margin-top: 18px;
+  }
+  .wa-profile-actions .wa-btn {
+    flex: 1;
+  }
+  .wa-profile-tabs {
+    gap: 24px;
+    overflow-x: auto;
+  }
+  .wa-offer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 520px) {
+  .wa-cover-actions .wa-cover-pill {
+    width: 46px;
+    padding: 0;
+    justify-content: center;
+    font-size: 0;
+  }
+  .wa-profile-name h1 {
+    font-size: 28px;
+  }
+  .wa-profile-rate-head,
+  .wa-profile-rate-row {
+    grid-template-columns: 1.2fr .65fr .65fr;
+    gap: 8px;
+  }
+  .wa-profile-rate-head,
+  .wa-profile-rate-row,
+  .wa-offer-card {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}

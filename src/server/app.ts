@@ -33,6 +33,7 @@ import { raffles } from "./raffles";
 import { render } from "./render";
 import { uploads } from "./uploads";
 import { upiQr } from "./upiqr";
+import { whoami } from "./whoami";
 
 export function createApp(): Express {
   const app = express();
@@ -147,6 +148,7 @@ export function createApp(): Express {
   app.use("/api/identities", identities);
   app.use("/api/preview", preview);
   app.use("/api/upload", uploads);
+  app.use("/api/whoami", whoami);
 
   // ── Deployment brand files (/brand) ───────────────────────────────────────
   // Static files for the storefront: logo, favicon, og images.

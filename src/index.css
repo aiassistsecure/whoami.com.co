@@ -2066,3 +2066,163 @@ html.theme-fade *::after {
     padding-right: 14px;
   }
 }
+
+
+/* Landing fidelity pass — tighten against the approved 1024px contract. */
+@media (min-width: 861px) {
+  .wa-nav-inner,
+  .wa-hero-copy,
+  .wa-featured {
+    width: min(1180px, calc(100% - 108px));
+  }
+  .wa-nav-inner {
+    height: 110px;
+  }
+  .wa-wordmark > span {
+    font-size: 38px;
+  }
+  .wa-wordmark > b {
+    border-radius: 8px;
+    padding: 6px 10px 5px;
+    font-size: 12px;
+  }
+  .wa-nav-links {
+    gap: 52px;
+  }
+  .wa-nav-links a {
+    font-size: 18px;
+  }
+  .wa-login {
+    width: 154px;
+    height: 64px;
+    border-radius: 16px;
+    font-size: 18px;
+  }
+  .wa-landing-hero {
+    min-height: 872px;
+  }
+  .wa-hero-photo {
+    width: 60%;
+    object-position: 52% 24%;
+  }
+  .wa-hero-copy {
+    padding-top: 188px;
+  }
+  .wa-hero-copy h1 {
+    max-width: 560px;
+    font-size: clamp(66px, 7.75vw, 92px);
+    line-height: .965;
+  }
+  .wa-price-line {
+    margin-top: 24px;
+    font-size: clamp(48px, 5.8vw, 68px);
+  }
+  .wa-hero-copy > p {
+    width: min(520px, 100%);
+    margin-top: 34px;
+    font-size: 20px;
+    line-height: 1.48;
+  }
+  .wa-hero-actions {
+    gap: 22px;
+    margin-top: 34px;
+  }
+  .wa-btn-hero {
+    min-width: 278px;
+    min-height: 70px;
+    border-radius: 16px;
+    font-size: 19px;
+  }
+  .wa-trust-row {
+    gap: 72px;
+    margin-top: 50px;
+    font-size: 16px;
+  }
+  .wa-featured {
+    margin-top: 0;
+    padding-bottom: 94px;
+  }
+  .wa-section-title {
+    margin-bottom: 26px;
+  }
+  .wa-section-title h2 {
+    font-size: 38px;
+  }
+  .wa-section-title a {
+    font-size: 20px;
+  }
+  .wa-featured-grid {
+    gap: 24px;
+  }
+  .wa-feature-image-wrap {
+    aspect-ratio: 1.17 / 1;
+    border-radius: 12px;
+  }
+  .wa-feature-card > strong {
+    margin-top: 15px;
+    font-size: 23px;
+  }
+  .wa-feature-card > span {
+    margin-top: 5px;
+    font-size: 17px;
+  }
+  .wa-feature-rates {
+    margin-top: 18px;
+  }
+  .wa-feature-rates > div {
+    min-height: 39px;
+    font-size: 17px;
+  }
+  .wa-feature-rates b {
+    font-size: 17px;
+  }
+  .wa-feature-button {
+    min-height: 64px;
+    margin-top: 18px;
+    border-radius: 15px;
+    font-size: 17px;
+  }
+}
+.wa-page,
+.wa-page * {
+  box-sizing: border-box;
+}
+.wa-page button,
+.wa-page input,
+.wa-page select {
+  font: inherit;
+}
+.wa-btn,
+.wa-login,
+.wa-nav-links a,
+.wa-section-title a {
+  transition: transform .16s ease, opacity .16s ease, background-color .16s ease, border-color .16s ease;
+}
+.wa-btn:hover,
+.wa-login:hover {
+  transform: translateY(-1px);
+}
+.wa-nav-links a:hover,
+.wa-section-title a:hover {
+  opacity: .76;
+}
+.wa-feature-card {
+  transition: transform .18s ease;
+}
+.wa-feature-card:hover {
+  transform: translateY(-2px);
+}
+.wa-feature-image {
+  transition: transform .35s ease;
+}
+.wa-feature-card:hover .wa-feature-image {
+  transform: scale(1.015);
+}
+@media (prefers-reduced-motion: reduce) {
+  .wa-btn,
+  .wa-login,
+  .wa-feature-card,
+  .wa-feature-image {
+    transition: none;
+  }
+}

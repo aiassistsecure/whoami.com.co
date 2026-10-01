@@ -43,7 +43,7 @@ export function CreatorCard({ creator }: { creator: CreatorCardModel }): React.R
         ))}
         <div className="wa-card-actions">
           <Link href={`/creator/${encodeURIComponent(creator.handle)}`} className="wa-btn wa-btn-outline">View Profile</Link>
-          <Link href={`/creator/${encodeURIComponent(creator.handle)}?offer=1`} className="wa-btn wa-btn-black">Make Offer</Link>
+          <Link href="/?waitlist=brand&source=discover_offer" className="wa-btn wa-btn-black">Make Offer</Link>
         </div>
       </div>
     </article>

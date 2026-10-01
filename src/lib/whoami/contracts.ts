@@ -56,6 +56,13 @@ export interface CreatorProfileView extends CreatorCard {
   completedDeals: number;
   repeatPartners: number;
   paymentConfirmedPercent: number;
+  portfolio: Array<{
+    title: string;
+    format: "photo" | "video";
+    platform: SocialPlatform;
+    imageUrl: string;
+    reachLabel: string;
+  }>;
 }
 
 export interface OfferDraft {

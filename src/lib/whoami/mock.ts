@@ -94,7 +94,7 @@ const featuredCreators: CreatorCard[] = [
     ...discoverCreators[0],
     handle: "mariaj",
     displayName: "Maria",
-    avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=90",
+    avatarUrl: "/whoami/creators/mariaj.webp",
     location: "Miami, FL",
   },
   {

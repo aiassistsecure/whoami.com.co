@@ -26,7 +26,6 @@ Examples:
 - price per story
 - price per short-form video
 - price per mention
-- price per month
 - product-only collaborations
 - custom offers
 
@@ -51,7 +50,9 @@ WhoAmI by The Agency exists to make that value discoverable and tradable.
 
 ## Status
 
-Early development.
+Public prelaunch: creator previews and the NEDB-backed early-access waitlist are ready for deployment. The marketplace transaction loop remains invite-only / in development.
+
+See [docs/WHOAMI_LAUNCH.md](./docs/WHOAMI_LAUNCH.md) for the locked-down production surface and deployment requirements.
 
 ## License
 

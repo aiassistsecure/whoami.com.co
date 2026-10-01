@@ -14,6 +14,8 @@ import { isAbsolute } from "node:path";
 export type AuthMode = "wallet" | "email";
 
 export interface LinksConfig {
+  /** True when this deployment exposes only the WhoAmI public waitlist surface. */
+  publicLaunch: boolean;
   /** Express port. */
   port: number;
   /** Which account system this deployment runs. */
@@ -96,6 +98,14 @@ export interface LinksConfig {
 export function loadConfig(): LinksConfig {
   const authMode: AuthMode =
     process.env.LINKS_AUTH_MODE === "email" ? "email" : "wallet";
+  const brandName = (process.env.LINKS_BRAND_NAME || "WhoAmI by The Agency").slice(0, 40);
+  const isWhoAmI = /^whoami\b/i.test(brandName);
+  const publicLaunch =
+    process.env.WHOAMI_PUBLIC_LAUNCH === "1" ||
+    (process.env.NODE_ENV === "production" &&
+      isWhoAmI &&
+      process.env.WHOAMI_LEGACY_SURFACES !== "1");
+
   return {
     publicLaunch,
     // LINKS_API_PORT is canonical — the generic PORT is read by many
@@ -165,6 +175,19 @@ export const config = loadConfig();
  */
 export function validateConfig(c: LinksConfig): string[] {
   const problems: string[] = [];
+
+  if (c.publicLaunch) {
+    if (!c.publicOrigin) {
+      problems.push("PUBLIC_ORIGIN is required for the WhoAmI public launch");
+    }
+
+    const dataPath = process.env.NEDB_PATH?.trim();
+    if (!dataPath) {
+      problems.push("NEDB_PATH is required for the WhoAmI public launch (use a persistent volume)");
+    } else if (!isAbsolute(dataPath)) {
+      problems.push("NEDB_PATH must be an absolute path for the WhoAmI public launch");
+    }
+  }
   if (c.authMode === "email" && process.env.LINKS_MAIL_TEST !== "1") {
     if (!c.smtpHost) problems.push("SMTP_HOST is required when LINKS_AUTH_MODE=email");
     if (!c.smtpUser || !c.smtpPass)

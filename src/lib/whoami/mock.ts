@@ -147,7 +147,10 @@ function profileFrom(creator: CreatorCard): CreatorProfileView {
 }
 
 export const profileViews: Record<string, CreatorProfileView> = Object.fromEntries(
-  discoverCreators.map((creator) => [creator.handle, profileFrom(creator)]),
+  [...discoverCreators, ...featuredCreators].map((creator) => [
+    creator.handle,
+    profileFrom(creator),
+  ]),
 );
 
 // Compatibility profile used by the existing BFF test and early development URL.

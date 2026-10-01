@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { Router } from "express";
 
-import type { DiscoverView, OfferDraft, SocialPlatform, WaitlistJoinInput, WaitlistRole } from "../lib/whoami/contracts";
+import type { CreatorProfileView, DiscoverView, OfferDraft, SocialPlatform, WaitlistJoinInput, WaitlistRole } from "../lib/whoami/contracts";
 import { discoverView, homeView, profileViews } from "../lib/whoami/mock";
 import { causalParent, db } from "./db";
 
@@ -39,9 +39,25 @@ whoami.get("/discover", (req, res) => {
   res.json(view);
 });
 
+function creatorProfile(identity: string): CreatorProfileView | undefined {
+  return profileViews[identity.trim().toLowerCase()];
+}
+
+whoami.get("/preview", (req, res) => {
+  const identity =
+    typeof req.query.identity === "string"
+      ? req.query.identity
+      : "";
+  const profile = creatorProfile(identity);
+  if (!profile) {
+    res.status(404).json({ error: "creator preview not found" });
+    return;
+  }
+  res.json(profile);
+});
+
 whoami.get("/creators/:handle", (req, res) => {
-  const handle = req.params.handle.toLowerCase();
-  const profile = profileViews[handle];
+  const profile = creatorProfile(req.params.handle);
   if (!profile) {
     res.status(404).json({ error: "creator not found" });
     return;

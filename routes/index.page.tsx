@@ -91,7 +91,7 @@ export default function WhoAmIHomePage(): React.ReactElement {
                   <div><span>Story</span><b>${creator.rates.story.video} / ${creator.rates.story.photo}</b></div>
                   <div><span>Reel</span><b>${creator.rates.reel.video} / ${creator.rates.reel.photo}</b></div>
                 </div>
-                <Link href={"/creator/" + encodeURIComponent(creator.handle)} className="wa-btn wa-btn-light wa-feature-button">Preview Profile</Link>
+                <Link href={"/creator/preview?identity=" + encodeURIComponent(creator.handle)} className="wa-btn wa-btn-light wa-feature-button">Preview Profile</Link>
               </article>
             ))}
           </div>

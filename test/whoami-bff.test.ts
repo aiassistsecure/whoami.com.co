@@ -77,3 +77,17 @@ test("WhoAmI waitlist rejects malformed signup data", async () => {
   });
   assert.equal(r.status, 400);
 });
+
+
+test("WhoAmI preview resolves featured identity from query args", async () => {
+  const r = await fetch(`${base}/api/whoami/preview?identity=tylerp`);
+  assert.equal(r.status, 200);
+  const j = await r.json() as { handle: string; displayName: string };
+  assert.equal(j.handle, "tylerp");
+  assert.equal(j.displayName, "Tyler");
+});
+
+test("WhoAmI preview returns 404 for an unknown identity", async () => {
+  const r = await fetch(`${base}/api/whoami/preview?identity=does-not-exist`);
+  assert.equal(r.status, 404);
+});

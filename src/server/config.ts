@@ -1,3 +1,5 @@
+import { isAbsolute } from "node:path";
+
 /** Server configuration — real env always wins over .env (loaded in server.ts). */
 
 /**

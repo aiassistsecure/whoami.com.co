@@ -99,7 +99,7 @@ export function loadConfig(): LinksConfig {
     // tools (vite, PaaS runtimes) and port collisions/skew follow.
     port: Number(process.env.LINKS_API_PORT || process.env.PORT || 3001),
     authMode,
-    brandName: (process.env.LINKS_BRAND_NAME || "WhoAmI by The Agency").slice(0, 40),
+    brandName,
     brandKey: ["default", "kundli"].includes(process.env.LINKS_BRAND_KEY || "")
       ? (process.env.LINKS_BRAND_KEY as string)
       : "default",

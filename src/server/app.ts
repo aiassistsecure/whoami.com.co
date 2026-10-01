@@ -139,9 +139,21 @@ export function createApp(): Express {
   // ── Public deployment config — the client's mode switch ──────────────────
   app.get("/api/config", (_req, res) => {
     if (config.publicLaunch) {
+      // Preserve the browser config contract while forcing legacy product
+      // capabilities off on the public waitlist host.
       res.json({
+        authMode: config.authMode,
         brandName: config.brandName,
+        brandKey: "default",
+        currency: "USD",
+        brandLogoUrl: config.brandLogoUrl || undefined,
         defaultTheme: config.defaultTheme,
+        fiatDoor: false,
+        limitEnabled: false,
+        uploads: false,
+        freeProfileLimit: 1,
+        freeBlockLimit: 1,
+        premiumProfileLimit: 0,
         publicLaunch: true,
       });
       return;

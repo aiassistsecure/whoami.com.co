@@ -118,8 +118,8 @@ export const homeView: HomeView = {
     eyebrow: "WHOAMI BY THE AGENCY",
     title: "Everyone's social media has value.",
     subtitle: "What's your price?",
-    primaryCta: "List Yourself",
-    secondaryCta: "Find Creators",
+    primaryCta: "Join the Waitlist",
+    secondaryCta: "Preview Creators",
   },
   featuredCreators,
 };

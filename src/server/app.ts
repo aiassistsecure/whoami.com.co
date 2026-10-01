@@ -53,13 +53,26 @@ export function createApp(): Express {
     next();
   });
 
-  app.use(cors());
-  // Stripe webhook needs the raw body for signature verification —
-  // mounted before the JSON parser touches anything.
-  mountWebhook(app);
-  // Same reason as Stripe's: HMAC is over exact bytes, so this must see
-  // the raw body before any parser rewrites it.
-  mountCashfreeWebhook(app);
+  // Nginx/Traefik normally sits on loopback in production. Trust proxy
+  // metadata only from loopback so req.ip is useful for rate limiting
+  // without trusting spoofed X-Forwarded-For from the public internet.
+  app.set("trust proxy", "loopback");
+
+  app.use((_req: Request, res: Response, next: NextFunction) => {
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("X-Frame-Options", "DENY");
+    res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+    res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+    next();
+  });
+
+  if (!config.publicLaunch) {
+    app.use(cors());
+    // Legacy payment webhooks are deliberately absent from the WhoAmI
+    // prelaunch surface. They only mount when the full Links product is on.
+    mountWebhook(app);
+    mountCashfreeWebhook(app);
+  }
   app.use(express.json({ limit: "8mb" }));
   // Zero-JS pages (/r/:id giveaway entry, confirm) submit real HTML
   // <form method="post"> — the browser sends application/x-www-form-
@@ -99,6 +112,16 @@ export function createApp(): Express {
       };
     }
 
+    if (config.publicLaunch) {
+      res.json({
+        ok: nedb.ok,
+        app: "whoami",
+        mode: "public-launch",
+        nedb: { ok: nedb.ok, mode: "embedded" },
+      });
+      return;
+    }
+
     res.json({
       links: "ok",
       nedb,
@@ -113,6 +136,15 @@ export function createApp(): Express {
 
   // ── Public deployment config — the client's mode switch ──────────────────
   app.get("/api/config", (_req, res) => {
+    if (config.publicLaunch) {
+      res.json({
+        brandName: config.brandName,
+        defaultTheme: config.defaultTheme,
+        publicLaunch: true,
+      });
+      return;
+    }
+
     res.json({
       authMode: config.authMode,
       brandName: config.brandName,
@@ -123,8 +155,6 @@ export function createApp(): Express {
       fiatDoor: Boolean(config.stripeSecretKey),
       limitEnabled: config.limitEnabled,
       uploads: Boolean(config.imgbbKey) || process.env.LINKS_UPLOAD_TEST === "1",
-      // Public policy numbers — the homepage ledger states the deal
-      // with the same figures the gates enforce.
       freeProfileLimit: config.freeProfileLimit,
       freeBlockLimit: config.freeBlockLimit,
       premiumProfileLimit: config.premiumProfileLimit,
@@ -132,23 +162,30 @@ export function createApp(): Express {
   });
 
   // ── API ───────────────────────────────────────────────────────────────────
-  // ONE account system per deployment. The other product's endpoints
-  // don't exist here — wallet routes 404 on ne-db.com and vice versa.
-  app.use("/api/admin", admin);
-  app.use("/api/auth", config.authMode === "email" ? accountsEmail : accounts);
-  app.use("/api/analytics", analyticsSummary);
-  app.use("/api/billing", billing);
-  app.use("/api/handles", handles);
-  app.use("/api/identities/:id/analytics", analytics);
-  app.use("/api/hireme", hireme);
-  app.use("/api/identities/:id/grants", grants);
-  app.use("/api/identities/:id/payments", payments);
-  app.use("/api/identities/:id/purchases", purchasesApi);
-  app.use("/api/identities/:id/qr", qrStudio);
-  app.use("/api/identities", identities);
-  app.use("/api/preview", preview);
-  app.use("/api/upload", uploads);
+  // WhoAmI public launch is an allowlist: the funnel BFF mounts; inherited
+  // Links APIs do not. This is stronger than auth-gating routes we do not need.
+  if (!config.publicLaunch) {
+    app.use("/api/admin", admin);
+    app.use("/api/auth", config.authMode === "email" ? accountsEmail : accounts);
+    app.use("/api/analytics", analyticsSummary);
+    app.use("/api/billing", billing);
+    app.use("/api/handles", handles);
+    app.use("/api/identities/:id/analytics", analytics);
+    app.use("/api/hireme", hireme);
+    app.use("/api/identities/:id/grants", grants);
+    app.use("/api/identities/:id/payments", payments);
+    app.use("/api/identities/:id/purchases", purchasesApi);
+    app.use("/api/identities/:id/qr", qrStudio);
+    app.use("/api/identities", identities);
+    app.use("/api/preview", preview);
+    app.use("/api/upload", uploads);
+  }
   app.use("/api/whoami", whoami);
+  if (config.publicLaunch) {
+    app.use("/api", (_req: Request, res: Response) => {
+      res.status(404).json({ error: "not found" });
+    });
+  }
 
   // ── Deployment brand files (/brand) ───────────────────────────────────────
   // Static files for the storefront: logo, favicon, og images.
@@ -190,13 +227,19 @@ export function createApp(): Express {
         .replace(
           /<title>[^<]*<\/title>/,
           branded
+            ? config.publicLaunch
+              ? `<title>${config.brandName} — Everyone's social media has value</title>`
+              : `<title>${config.brandName} — one link that holds all your links</title>`
+            : "branded
             ? `<title>${config.brandName} — one link that holds all your links</title>`
-            : "$&",
+            : "$&"",
         )
         .replace(
           /<meta\s+name="description"[^>]*>/s,
           branded
-            ? `<meta name="description" content="Claim your handle on ${config.brandName}: one page for every link, a print-grade QR, save-my-contact, giveaways and live stats. Free forever — premium once, never monthly." />`
+            ? config.publicLaunch
+              ? `<meta name="description" content="Join the ${config.brandName} early-access waitlist. Creators set their price and brands discover real opportunities." />`
+              : `<meta name="description" content="Claim your handle on ${config.brandName}: one page for every link, a print-grade QR, save-my-contact, giveaways and live stats. Free forever — premium once, never monthly." />`
             : "$&",
         )
     : null;
@@ -205,28 +248,33 @@ export function createApp(): Express {
     res.send(shellHtml);
   };
   if (hasDist) {
-    app.get(["/", "/index.html"], (_req, res) => sendShell(res));
+    const publicLaunchPages = ["/", "/index.html", "/discover", "/privacy", "/creator", "/creator/*"];
+    app.get(config.publicLaunch ? publicLaunchPages : ["/", "/index.html"], (_req, res) => sendShell(res));
     app.use(express.static(dist, { index: false }));
-  } else {
-    // Preserve the inherited zero-JS Discover contract for live API tests
-    // and source-only development. Production builds hand /discover to Portal.
+  } else if (!config.publicLaunch) {
+    // Preserve the inherited zero-JS Discover contract for live API tests.
     app.get("/discover", discoverPage);
   }
 
   // ── Public identity surfaces (/:handle, /go/*) ────────────────────────────
-  // Discover mounts BEFORE /:handle so the directory wins the route.
-  app.use(discover);
-  app.use(raffles); // /r/:id pages + /api/raffles — before /:handle
-  app.use(upiQr); // /upi/:identityId/:blockId.svg — before /:handle
-  app.use(purchases); // /buy/:identityId/:blockId — before /:handle
-  app.use(demo); // /demo — the homepage's live "what done looks like"
-  app.use(qrFlyer); // /qr/flyer/:id — print sheet, before /:handle
-  app.use(render);
+  if (!config.publicLaunch) {
+    app.use(discover);
+    app.use(raffles);
+    app.use(upiQr);
+    app.use(purchases);
+    app.use(demo);
+    app.use(qrFlyer);
+    app.use(render);
+  }
 
   // ── SPA fallback ──────────────────────────────────────────────────────────
   app.get("*", (req: Request, res: Response) => {
     if (req.path.startsWith("/api/")) {
       res.status(404).json({ error: "not found" });
+      return;
+    }
+    if (config.publicLaunch) {
+      res.status(404).send("not found");
       return;
     }
     if (hasDist) {

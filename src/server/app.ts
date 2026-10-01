@@ -230,9 +230,7 @@ export function createApp(): Express {
             ? config.publicLaunch
               ? `<title>${config.brandName} — Everyone's social media has value</title>`
               : `<title>${config.brandName} — one link that holds all your links</title>`
-            : "branded
-            ? `<title>${config.brandName} — one link that holds all your links</title>`
-            : "$&"",
+            : "$&",
         )
         .replace(
           /<meta\s+name="description"[^>]*>/s,

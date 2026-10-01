@@ -2226,3 +2226,243 @@ html.theme-fade *::after {
     transition: none;
   }
 }
+
+
+/* ──────────────────────────────────────────────────────────────────────
+ * WhoAmI by The Agency — waitlist funnel.
+ * Keep product-preview surfaces usable; convert intent at the action edge.
+ * ──────────────────────────────────────────────────────────────────── */
+.wa-discover-join {
+  min-width: 142px;
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #101115;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 800;
+  transition: transform .16s ease, opacity .16s ease;
+}
+.wa-discover-join:hover { transform: translateY(-1px); }
+
+.wa-waitlist-band {
+  margin-top: 64px;
+  padding: 34px 36px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  background:
+    radial-gradient(circle at 78% 20%, rgba(118,91,255,.22), transparent 34%),
+    #111216;
+}
+.wa-waitlist-band > div:first-child > span,
+.wa-offer-preview-label {
+  color: #9a80ff;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: .15em;
+}
+.wa-waitlist-band h3 {
+  margin: 8px 0 0;
+  font-size: 28px;
+  letter-spacing: -.035em;
+}
+.wa-waitlist-band p {
+  margin: 8px 0 0;
+  color: #a9a9b0;
+  font-size: 14px;
+}
+.wa-waitlist-band-actions {
+  display: flex;
+  gap: 10px;
+  flex: none;
+}
+
+.wa-waitlist-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(6,7,10,.72);
+  backdrop-filter: blur(12px);
+}
+.wa-waitlist-modal {
+  position: relative;
+  width: min(500px, 100%);
+  border-radius: 24px;
+  padding: 34px;
+  background: #fff;
+  color: #121318;
+  box-shadow: 0 36px 100px rgba(0,0,0,.38);
+}
+.wa-waitlist-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #f2f2f5;
+  color: #414249;
+  cursor: pointer;
+}
+.wa-waitlist-kicker {
+  color: #7258ed;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .16em;
+}
+.wa-waitlist-modal h2 {
+  margin: 9px 42px 0 0;
+  font-size: 34px;
+  line-height: 1.06;
+  letter-spacing: -.045em;
+}
+.wa-waitlist-modal > p,
+.wa-waitlist-success > p {
+  margin: 14px 0 0;
+  color: #71727a;
+  line-height: 1.55;
+}
+.wa-waitlist-modal form {
+  margin-top: 26px;
+}
+.wa-waitlist-role {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 4px;
+  border-radius: 12px;
+  background: #f0f0f3;
+}
+.wa-waitlist-role button {
+  min-height: 42px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #6c6d75;
+  font-size: 13px;
+  font-weight: 750;
+  cursor: pointer;
+}
+.wa-waitlist-role button.active {
+  background: #fff;
+  color: #111217;
+  box-shadow: 0 2px 8px rgba(18,19,24,.08);
+}
+.wa-waitlist-email {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+}
+.wa-waitlist-email > span {
+  color: #686971;
+  font-size: 12px;
+  font-weight: 750;
+}
+.wa-waitlist-email input {
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid #dcDde3;
+  border-radius: 12px;
+  padding: 0 14px;
+  outline: none;
+  background: #fff;
+  color: #15161b;
+}
+.wa-waitlist-email input:focus {
+  border-color: #8b73f6;
+  box-shadow: 0 0 0 3px rgba(118,91,255,.12);
+}
+.wa-waitlist-submit {
+  width: 100%;
+  min-height: 54px;
+  margin-top: 16px;
+  font-size: 15px;
+}
+.wa-waitlist-submit:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+.wa-waitlist-modal > small {
+  display: block;
+  margin-top: 13px;
+  color: #9899a1;
+  text-align: center;
+  font-size: 11px;
+}
+.wa-waitlist-error {
+  margin-top: 10px;
+  color: #b42318;
+  font-size: 12px;
+}
+.wa-waitlist-success {
+  text-align: center;
+  padding: 12px 4px 2px;
+}
+.wa-waitlist-success > span {
+  width: 54px;
+  height: 54px;
+  margin: 0 auto;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #101115;
+  color: #fff;
+}
+.wa-waitlist-success h2 {
+  margin: 18px 0 0;
+}
+.wa-waitlist-success .wa-btn {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 24px;
+}
+.wa-offer-preview-label {
+  margin-bottom: 7px;
+}
+
+@media (max-width: 760px) {
+  .wa-waitlist-band {
+    align-items: stretch;
+    flex-direction: column;
+    padding: 26px;
+  }
+  .wa-waitlist-band-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 520px) {
+  .wa-discover-join {
+    min-width: 112px;
+    min-height: 42px;
+    padding: 0 13px;
+    font-size: 12px;
+  }
+  .wa-waitlist-modal {
+    padding: 28px 20px 22px;
+    border-radius: 20px;
+  }
+  .wa-waitlist-modal h2 {
+    font-size: 29px;
+  }
+  .wa-waitlist-role {
+    grid-template-columns: 1fr;
+  }
+  .wa-waitlist-band-actions {
+    grid-template-columns: 1fr;
+  }
+}

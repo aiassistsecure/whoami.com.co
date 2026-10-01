@@ -2,7 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, BadgeCheck, Ellipsis, MapPin, Share2 } from "lucide-react";
 import { RateTable } from "../../src/components/whoami/RateTable";
 import { SocialIcon } from "../../src/components/whoami/SocialIcon";
-import { getJson, postJson } from "../../src/lib/api";
+import { WaitlistModal } from "../../src/components/whoami/WaitlistModal";
+import { getJson } from "../../src/lib/api";
 import type { CreatorProfileView, MediaType, Placement } from "../../src/lib/whoami/contracts";
 
 function routeHandle(): string {
@@ -16,7 +17,7 @@ export default function WhoAmICreatorPage(): React.ReactElement {
   const [placement, setPlacement] = useState<Placement>("post");
   const [mediaType, setMediaType] = useState<MediaType>("photo");
   const [amount, setAmount] = useState<number | "">("");
-  const [sent, setSent] = useState(false);
+  const [waitlistOpen, setWaitlistOpen] = useState(false);
 
   useEffect(() => {
     void getJson<CreatorProfileView>(`/api/whoami/creators/${encodeURIComponent(handle)}`).then(setProfile);
@@ -26,20 +27,6 @@ export default function WhoAmICreatorPage(): React.ReactElement {
 
   const listed = profile.rates[placement][mediaType];
   const cover = profile.coverUrl ?? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=90";
-
-  async function sendOffer(): Promise<void> {
-    if (!profile || amount === "") return;
-    await postJson("/api/whoami/offers", {
-      creatorHandle: profile.handle,
-      platform: profile.platform,
-      placement,
-      mediaType,
-      listedPrice: listed,
-      amount,
-      message: "",
-    });
-    setSent(true);
-  }
 
   return (
     <div className="wa-profile-page">
@@ -58,7 +45,7 @@ export default function WhoAmICreatorPage(): React.ReactElement {
             <img src={profile.avatarUrl} alt="" className="wa-profile-avatar" />
 
             <div className="wa-profile-actions">
-              <button className="wa-btn wa-btn-outline">Follow</button>
+              <button className="wa-btn wa-btn-outline" onClick={() => setWaitlistOpen(true)}>Follow</button>
               <a href="#offer" className="wa-btn wa-btn-black">Make an Offer</a>
             </div>
 
@@ -86,6 +73,7 @@ export default function WhoAmICreatorPage(): React.ReactElement {
             <div className="wa-profile-rates"><RateTable rates={profile.rates} /></div>
 
             <section className="wa-offer-card" id="offer">
+              <div className="wa-offer-preview-label">MARKETPLACE PREVIEW</div>
               <h2>Make an Offer</h2>
               <div className="wa-offer-creator">
                 <img src={profile.avatarUrl} alt="" />
@@ -112,15 +100,22 @@ export default function WhoAmICreatorPage(): React.ReactElement {
                 </label>
               </div>
 
-              <button className="wa-btn wa-btn-black wa-send-offer" onClick={() => void sendOffer()}>
-                {sent ? "Offer Sent ✓" : "Send Offer"}
+              <button className="wa-btn wa-btn-black wa-send-offer" onClick={() => setWaitlistOpen(true)}>
+                Join Waitlist to Send Offer
               </button>
             </section>
 
-            <div className="wa-agency-mark">WhoAmI by The Agency</div>
+            <div className="wa-agency-mark">WhoAmI by The Agency · Early Access</div>
           </section>
         </section>
       </main>
+
+      <WaitlistModal
+        open={waitlistOpen}
+        onClose={() => setWaitlistOpen(false)}
+        source={`profile_${profile.handle}`}
+        defaultRole="brand"
+      />
     </div>
   );
 }

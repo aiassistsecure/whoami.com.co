@@ -39,3 +39,41 @@ test("WhoAmI by The Agency discover filters by platform", async () => {
   assert.ok(j.creators.length > 0);
   assert.ok(j.creators.every((c) => c.platform === "x"));
 });
+
+
+test("WhoAmI waitlist persists signup intent and deduplicates by email", async () => {
+  const body = {
+    email: "waitlist-bff@example.com",
+    role: "creator",
+    source: "test",
+  };
+
+  const first = await fetch(`${base}/api/whoami/waitlist`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  assert.ok(first.status === 200 || first.status === 201);
+  const firstJson = await first.json() as { ok: boolean; status: string };
+  assert.equal(firstJson.ok, true);
+  assert.ok(firstJson.status === "joined" || firstJson.status === "already_joined");
+
+  const second = await fetch(`${base}/api/whoami/waitlist`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ ...body, role: "brand", source: "test-second" }),
+  });
+  assert.equal(second.status, 200);
+  const secondJson = await second.json() as { ok: boolean; status: string };
+  assert.equal(secondJson.ok, true);
+  assert.equal(secondJson.status, "already_joined");
+});
+
+test("WhoAmI waitlist rejects malformed signup data", async () => {
+  const r = await fetch(`${base}/api/whoami/waitlist`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ email: "not-an-email", role: "creator", source: "test" }),
+  });
+  assert.equal(r.status, 400);
+});

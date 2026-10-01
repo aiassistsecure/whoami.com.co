@@ -56,9 +56,10 @@ export default defineApp({
   },
 
   conversion: {
-    primaryGoal: "Claim a handle",
-    secondaryGoal: "Publish an identity",
+    primaryGoal: "Join the WhoAmI waitlist",
+    secondaryGoal: "Preview the creator marketplace",
     successEvents: [
+      "waitlist_joined",
       "handle_claimed",
       "identity_published",
       "qr_downloaded",

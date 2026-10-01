@@ -1,6 +1,7 @@
 export type SocialPlatform = "instagram" | "tiktok" | "x" | "youtube" | "linkedin";
 export type Placement = "post" | "story" | "reel";
 export type MediaType = "video" | "photo";
+export type WaitlistRole = "creator" | "brand" | "both";
 
 export interface RatePair {
   video: number;
@@ -65,4 +66,16 @@ export interface OfferDraft {
   listedPrice: number;
   amount: number;
   message: string;
+}
+
+
+export interface WaitlistJoinInput {
+  email: string;
+  role: WaitlistRole;
+  source: string;
+}
+
+export interface WaitlistJoinResponse {
+  ok: true;
+  status: "joined" | "already_joined";
 }

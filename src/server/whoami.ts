@@ -1,7 +1,9 @@
+import { createHash } from "node:crypto";
 import { Router } from "express";
 
-import type { DiscoverView, OfferDraft, SocialPlatform } from "../lib/whoami/contracts";
+import type { DiscoverView, OfferDraft, SocialPlatform, WaitlistJoinInput, WaitlistRole } from "../lib/whoami/contracts";
 import { discoverView, homeView, profileViews } from "../lib/whoami/mock";
+import { causalParent, db } from "./db";
 
 export const whoami = Router();
 
@@ -67,5 +69,56 @@ whoami.post("/offers", (req, res) => {
       id: "offer_mock_001",
       status: "sent",
     },
+  });
+});
+
+
+function normalizedWaitlistRole(value: unknown): WaitlistRole | null {
+  return value === "creator" || value === "brand" || value === "both" ? value : null;
+}
+
+whoami.post("/waitlist", async (req, res) => {
+  const body = req.body as Partial<WaitlistJoinInput>;
+  const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+  const role = normalizedWaitlistRole(body.role);
+  const source = typeof body.source === "string" ? body.source.trim().slice(0, 80) : "";
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !role || !source) {
+    res.status(400).json({ error: "invalid waitlist signup" });
+    return;
+  }
+
+  const id = createHash("sha256").update(email).digest("hex").slice(0, 32);
+  const existing = await db.get("whoami_waitlist", id);
+  const now = new Date().toISOString();
+  const existingRole = existing && typeof existing.role === "string" ? existing.role : undefined;
+  const mergedRole: WaitlistRole =
+    existingRole && existingRole !== role ? "both" : role;
+  const existingSources =
+    existing && Array.isArray(existing.sources)
+      ? existing.sources.filter((value): value is string => typeof value === "string")
+      : [];
+  const sources = Array.from(new Set([...existingSources, source]));
+
+  await db.put(
+    "whoami_waitlist",
+    id,
+    {
+      email,
+      role: mergedRole,
+      sources,
+      firstSeenAt:
+        existing && typeof existing.firstSeenAt === "string"
+          ? existing.firstSeenAt
+          : now,
+      updatedAt: now,
+      status: "active",
+    },
+    { causedBy: causalParent(existing) },
+  );
+
+  res.status(existing ? 200 : 201).json({
+    ok: true,
+    status: existing ? "already_joined" : "joined",
   });
 });

@@ -6,22 +6,42 @@ import { WaitlistModal } from "../../src/components/whoami/WaitlistModal";
 import { getJson } from "../../src/lib/api";
 import type { CreatorProfileView, MediaType, Placement } from "../../src/lib/whoami/contracts";
 
-function routeHandle(): string {
+function previewIdentity(): string {
+  const query = new URLSearchParams(window.location.search).get("identity")?.trim();
+  if (query) return query.toLowerCase();
+
   const parts = window.location.pathname.split("/").filter(Boolean);
-  return decodeURIComponent(parts[1] ?? "");
+  return decodeURIComponent(parts[1] ?? "").toLowerCase();
 }
 
 export default function WhoAmICreatorPage(): React.ReactElement {
-  const handle = useMemo(routeHandle, []);
+  const identity = useMemo(previewIdentity, []);
   const [profile, setProfile] = useState<CreatorProfileView | null>(null);
+  const [loadError, setLoadError] = useState(false);
   const [placement, setPlacement] = useState<Placement>("post");
   const [mediaType, setMediaType] = useState<MediaType>("photo");
   const [amount, setAmount] = useState<number | "">("");
   const [waitlistOpen, setWaitlistOpen] = useState(false);
 
   useEffect(() => {
-    void getJson<CreatorProfileView>(`/api/whoami/creators/${encodeURIComponent(handle)}`).then(setProfile);
-  }, [handle]);
+    setLoadError(false);
+    void getJson<CreatorProfileView>(
+      `/api/whoami/preview?identity=${encodeURIComponent(identity)}`,
+    )
+      .then(setProfile)
+      .catch(() => setLoadError(true));
+  }, [identity]);
+
+  if (loadError) {
+    return (
+      <div className="wa-profile-loading">
+        <div>
+          <strong>Preview unavailable.</strong>
+          <a href="/discover">Back to creator previews</a>
+        </div>
+      </div>
+    );
+  }
 
   if (!profile) return <div className="wa-profile-loading">Loading creator…</div>;
 

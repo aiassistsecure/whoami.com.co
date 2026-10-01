@@ -97,6 +97,7 @@ export function loadConfig(): LinksConfig {
   const authMode: AuthMode =
     process.env.LINKS_AUTH_MODE === "email" ? "email" : "wallet";
   return {
+    publicLaunch,
     // LINKS_API_PORT is canonical — the generic PORT is read by many
     // tools (vite, PaaS runtimes) and port collisions/skew follow.
     port: Number(process.env.LINKS_API_PORT || process.env.PORT || 3001),

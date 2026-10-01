@@ -143,6 +143,29 @@ function profileFrom(creator: CreatorCard): CreatorProfileView {
     completedDeals: 18,
     repeatPartners: 7,
     paymentConfirmedPercent: 100,
+    portfolio: [
+      {
+        title: "Brand collaboration",
+        format: "photo",
+        platform: creator.platform,
+        imageUrl: creator.coverUrl ?? creator.avatarUrl,
+        reachLabel: creator.followersLabel,
+      },
+      {
+        title: "Product feature",
+        format: "video",
+        platform: creator.platform,
+        imageUrl: creator.avatarUrl,
+        reachLabel: creator.engagementLabel,
+      },
+      {
+        title: "Lifestyle campaign",
+        format: "photo",
+        platform: "instagram",
+        imageUrl: creator.coverUrl ?? creator.avatarUrl,
+        reachLabel: creator.followersLabel,
+      },
+    ],
   };
 }
 

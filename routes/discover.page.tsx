@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Bell, ChevronDown, Search, SlidersHorizontal } from "lucide-react";
+import { ChevronDown, Search, SlidersHorizontal } from "lucide-react";
 import { CreatorCard } from "../src/components/whoami/CreatorCard";
 import { getJson } from "../src/lib/api";
 import type { DiscoverView, SocialPlatform } from "../src/lib/whoami/contracts";
@@ -26,11 +26,7 @@ export default function WhoAmIDiscoverPage(): React.ReactElement {
     <div className="wa-page wa-dark wa-discover-page">
       <header className="wa-discover-top">
         <a href="/" className="wa-discover-wordmark">whoami<small>by The Agency</small></a>
-        <div className="wa-discover-icons">
-          <Search size={25} />
-          <Bell size={23} />
-          <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=80&q=80" alt="" />
-        </div>
+        <a className="wa-discover-join" href="/?waitlist=brand&source=discover_header">Join Waitlist</a>
       </header>
 
       <main className="wa-discover-shell">

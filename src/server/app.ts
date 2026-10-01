@@ -73,14 +73,16 @@ export function createApp(): Express {
     mountWebhook(app);
     mountCashfreeWebhook(app);
   }
-  app.use(express.json({ limit: "8mb" }));
+  app.use(express.json({ limit: config.publicLaunch ? "32kb" : "8mb" }));
   // Zero-JS pages (/r/:id giveaway entry, confirm) submit real HTML
   // <form method="post"> — the browser sends application/x-www-form-
   // urlencoded, which express.json() silently ignores (req.body stays
   // {}). Without this, EVERY field looks "missing" to the server no
   // matter what the visitor typed — found live, the entry form was
   // unusable end-to-end.
-  app.use(express.urlencoded({ extended: false, limit: "1mb" }));
+  if (!config.publicLaunch) {
+    app.use(express.urlencoded({ extended: false, limit: "1mb" }));
+  }
 
   // ── Health — reports every dependency ────────────────────────────────────
   app.get("/api/health", async (_req, res) => {

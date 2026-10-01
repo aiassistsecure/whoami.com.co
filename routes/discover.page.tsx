@@ -62,7 +62,7 @@ export default function WhoAmIDiscoverPage(): React.ReactElement {
           {(view?.creators ?? []).map((creator) => <CreatorCard creator={creator} key={creator.handle} />)}
         </section>
       </main>
-      <footer className="wa-footer">WhoAmI by The Agency</footer>
+      <footer className="wa-footer">WhoAmI by The Agency · <a href="/privacy">Privacy</a></footer>
     </div>
   );
 }

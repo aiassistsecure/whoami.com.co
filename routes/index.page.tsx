@@ -109,7 +109,7 @@ export default function WhoAmIHomePage(): React.ReactElement {
           </div>
         </section>
       </main>
-      <footer className="wa-footer">WhoAmI by The Agency · GPLv3</footer>
+      <footer className="wa-footer">WhoAmI by The Agency · GPLv3 · <Link href="/privacy">Privacy</Link></footer>
 
       <WaitlistModal
         open={waitlistOpen}

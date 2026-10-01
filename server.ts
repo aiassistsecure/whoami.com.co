@@ -49,7 +49,11 @@ await ensureDatabase();
 const server = createApp().listen(config.port, () => {
   console.log(`\x1b[36m⬡ WhoAmI by The Agency\x1b[0m listening on :${config.port}`);
   console.log(`  NEDB → embedded durable DAG (db: ${config.nedbDb})`);
-  warnIfOpen();
+  if (config.publicLaunch) {
+    console.log("  surface → WhoAmI public launch allowlist");
+  } else {
+    warnIfOpen();
+  }
 });
 
 // The #1 boot killer is a port collision (PORT is read by many tools —

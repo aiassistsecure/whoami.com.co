@@ -90,7 +90,7 @@ export function WaitlistModal({
               </button>
             </form>
 
-            <small>No subscriptions. No premium gates. Just launch access.</small>
+            <small>By joining, you agree to receive WhoAmI early-access and launch email. <a href="/privacy">Privacy</a></small>
           </>
         )}
       </section>

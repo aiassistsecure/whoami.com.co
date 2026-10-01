@@ -36,6 +36,8 @@ export interface AppConfig {
   fiatDoor: boolean;
   limitEnabled: boolean;
   uploads: boolean;
+  /** True on the locked-down WhoAmI waitlist deployment. */
+  publicLaunch?: boolean;
   /** Public policy numbers — the homepage ledger states the deal with
    *  the same figures the gates enforce. Optional: older servers. */
   freeProfileLimit?: number;

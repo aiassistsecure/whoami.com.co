@@ -5,7 +5,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { loadConfig } from "../src/server/config";
+import { loadConfig, validateConfig } from "../src/server/config";
 
 function withEnv<T>(vars: Record<string, string | undefined>, fn: () => T): T {
   const prior = new Map<string, string | undefined>();
@@ -79,4 +79,44 @@ test("storefront wireframes: brandKey and currency are enum-gated, default safe"
   } finally {
     process.env = snap;
   }
+});
+
+
+test("WhoAmI production fails closed into the public launch surface", () => {
+  const launch = withEnv(
+    {
+      NODE_ENV: "production",
+      LINKS_BRAND_NAME: undefined,
+      WHOAMI_PUBLIC_LAUNCH: undefined,
+      WHOAMI_LEGACY_SURFACES: undefined,
+      PUBLIC_ORIGIN: "https://whoami.com.co",
+      NEDB_PATH: "/var/lib/whoami/nedb",
+    },
+    loadConfig,
+  );
+  assert.equal(launch.publicLaunch, true);
+
+  const problems = withEnv(
+    {
+      NODE_ENV: "production",
+      LINKS_BRAND_NAME: undefined,
+      WHOAMI_PUBLIC_LAUNCH: undefined,
+      WHOAMI_LEGACY_SURFACES: undefined,
+      PUBLIC_ORIGIN: undefined,
+      NEDB_PATH: undefined,
+    },
+    () => validateConfig(loadConfig()),
+  );
+  assert.ok(problems.some((p) => p.includes("PUBLIC_ORIGIN")));
+  assert.ok(problems.some((p) => p.includes("NEDB_PATH")));
+
+  const legacy = withEnv(
+    {
+      NODE_ENV: "production",
+      LINKS_BRAND_NAME: undefined,
+      WHOAMI_LEGACY_SURFACES: "1",
+    },
+    loadConfig,
+  );
+  assert.equal(legacy.publicLaunch, false, "legacy surfaces require an explicit production escape hatch");
 });

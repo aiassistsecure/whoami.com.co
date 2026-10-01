@@ -3,6 +3,7 @@ import { Router } from "express";
 
 import type { CreatorProfileView, DiscoverView, OfferDraft, SocialPlatform, WaitlistJoinInput, WaitlistRole } from "../lib/whoami/contracts";
 import { discoverView, homeView, profileViews } from "../lib/whoami/mock";
+import { config } from "./config";
 import { causalParent, db } from "./db";
 
 export const whoami = Router();
@@ -89,11 +90,40 @@ whoami.post("/offers", (req, res) => {
 });
 
 
+const waitlistAttempts = new Map<string, { count: number; resetAt: number }>();
+const WAITLIST_WINDOW_MS = 10 * 60 * 1000;
+const WAITLIST_MAX_ATTEMPTS = 8;
+
+function allowWaitlistAttempt(ip: string): boolean {
+  if (!config.publicLaunch) return true;
+
+  const now = Date.now();
+  const current = waitlistAttempts.get(ip);
+  if (!current || current.resetAt <= now) {
+    waitlistAttempts.set(ip, { count: 1, resetAt: now + WAITLIST_WINDOW_MS });
+    return true;
+  }
+  current.count += 1;
+  if (waitlistAttempts.size > 5000) {
+    for (const [key, value] of waitlistAttempts) {
+      if (value.resetAt <= now) waitlistAttempts.delete(key);
+    }
+  }
+  return current.count <= WAITLIST_MAX_ATTEMPTS;
+}
+
 function normalizedWaitlistRole(value: unknown): WaitlistRole | null {
   return value === "creator" || value === "brand" || value === "both" ? value : null;
 }
 
 whoami.post("/waitlist", async (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  if (!allowWaitlistAttempt(req.ip || req.socket.remoteAddress || "unknown")) {
+    res.setHeader("Retry-After", "600");
+    res.status(429).json({ error: "too many waitlist attempts" });
+    return;
+  }
+
   const body = req.body as Partial<WaitlistJoinInput>;
   const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
   const role = normalizedWaitlistRole(body.role);

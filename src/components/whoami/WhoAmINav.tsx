@@ -14,7 +14,7 @@ export function WhoAmINav(): React.ReactElement {
           <Link href="/discover">Discover</Link>
           <a href="/#about">About</a>
         </div>
-        <Link href="/identities" className="wa-login">Login</Link>
+        <Link href="/?waitlist=creator&source=nav" className="wa-login">Join Waitlist</Link>
       </div>
     </nav>
   );

@@ -91,3 +91,19 @@ test("WhoAmI preview returns 404 for an unknown identity", async () => {
   const r = await fetch(`${base}/api/whoami/preview?identity=does-not-exist`);
   assert.equal(r.status, 404);
 });
+
+
+test("WhoAmI preview supplies data for all interactive profile tabs", async () => {
+  const r = await fetch(`${base}/api/whoami/preview?identity=tylerp`);
+  assert.equal(r.status, 200);
+  const j = await r.json() as {
+    bio: string;
+    audience: unknown[];
+    portfolio: unknown[];
+    rates: Record<string, unknown>;
+  };
+  assert.ok(j.bio.length > 0);
+  assert.ok(j.audience.length > 0);
+  assert.ok(j.portfolio.length >= 3);
+  assert.ok(Object.keys(j.rates).length >= 3);
+});
